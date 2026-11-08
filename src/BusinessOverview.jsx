@@ -3,7 +3,7 @@ import { useState } from 'react';
 // These are presentation groups, not claims that each entry is an independent company.
 const SECTIONS = [
   { id: 'business', number: '01', name: '业务', ids: ['channel', 'members'] },
-  { id: 'research', number: '02', name: '研究', ids: ['research', 'mining', 'strategy'] },
+  { id: 'research', number: '02', name: '研究', ids: ['research', 'mining'] },
   { id: 'future', number: '03', name: '探索', ids: ['future', 'agi', 'podcast'] },
 ];
 

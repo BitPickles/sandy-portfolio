@@ -9,7 +9,7 @@ const xProfile = 'https://x.com/22333D';
 
 const projects = [
   {
-    id: 'channel', number: '01', name: '3D 加密频道', english: 'CRYPTO3D', category: 'CONTENT / FILM', image: galleryImage('channel.webp'),
+    id: 'channel', name: '3D 加密频道', english: 'CRYPTO3D', category: 'CONTENT / FILM', image: galleryImage('channel.webp'),
     title: '把复杂的世界，讲得明白一点。',
     lead: '我在 YouTube 用中文分享 DeFi、套利和链上策略，讲清楚机会从哪里来、风险在哪里。',
     story: '频道里有 Pendle 收益策略、JLP 套利和 Uniswap 代币机制等专题，也会做硬件钱包体验和投资研究。',
@@ -19,7 +19,7 @@ const projects = [
     link: 'https://www.youtube.com/@Crypto36D', linkLabel: '观看 YouTube 频道',
   },
   {
-    id: 'research', number: '02', name: 'Crypto3D 数据站', english: 'RESEARCH', category: 'RESEARCH / DATA', image: galleryImage('research.webp'),
+    id: 'research', name: 'Crypto3D 数据站', english: 'RESEARCH', category: 'RESEARCH / DATA', image: galleryImage('research.webp'),
     title: '给每一个判断，留下证据。',
     lead: '用数据看 DeFi 协议估值、BTC 市场周期和代币持有人回报。',
     story: '协议估值看板追踪回购、销毁和分红等机制，比较不同协议的 P/E、P/S 和持有人回报率。',
@@ -29,9 +29,9 @@ const projects = [
     link: 'https://crypto3d.pro/', linkLabel: '打开数据站',
   },
   {
-    id: 'mining', number: '03', name: '什么值得挖', english: 'OPPORTUNITY', category: 'DEFI / STRATEGY', image: galleryImage('mining.webp'),
+    id: 'mining', name: '什么值得挖', english: 'OPPORTUNITY', category: 'DEFI / STRATEGY', image: galleryImage('mining.webp'),
     title: '机会的背面，通常写着风险。',
-    lead: '「什么值得挖」关注链上收益机会，以及策略背后的风险。',
+    lead: '「什么值得挖」会展示不同的链上挖矿策略，拆解收益来源、主要风险和退出条件。',
     story: '分析链上收益时，我会先看资金从哪里来、补贴能持续多久，以及退出时有没有足够的流动性。',
     detail: '网站入口是「矿田」会员登录页，符合资格的会员可使用 Google 账号登录。',
     steps: ['区分真实利息、平台激励和一次性奖励。', '测试容量、流动性与极端情景下的退出条件。', '把收益率放回自己的风险预算，而非只追榜单。'],
@@ -39,7 +39,7 @@ const projects = [
     link: 'https://shenmezhidewa.com', linkLabel: '前往会员登录',
   },
   {
-    id: 'agi', number: '04', name: 'AGI / 通用人工智能', english: 'AGI', category: 'FUTURE / IDEAS', image: galleryImage('agi.webp'),
+    id: 'agi', name: 'AGI / 通用人工智能', english: 'AGI', category: 'FUTURE / IDEAS', image: galleryImage('agi.webp'),
     title: '当机器开始真正理解世界。',
     lead: '关于 AGI 何时到来、它能改变什么，以及我们该如何理解那些相互矛盾的预测。',
     story: 'AGI 是我长期追踪的重要命题之一。人们既兴奋，又焦虑；有人认为突破已经近在眼前，也有人提醒我们，模型的能力与真正通用的智能还有距离。',
@@ -48,7 +48,7 @@ const projects = [
     quote: '未来不是一个答案，而是一组等待验证的假设。', secondary: galleryImage('future.webp')
   },
   {
-    id: 'podcast', number: '05', name: '翻译播客', english: 'CONVERSATIONS', category: 'AUDIO / WORDS', image: galleryImage('podcast.webp'),
+    id: 'podcast', name: '翻译播客', english: 'CONVERSATIONS', category: 'AUDIO / WORDS', image: galleryImage('podcast.webp'),
     title: '让值得听见的想法，跨过语言。',
     lead: '那些有价值的观点，有时藏在一段两三个小时的英文对话里。',
     story: '我喜欢长对谈里缓慢展开的思考。科技、AI、投资，以及人如何做出艰难的选择，都是我感兴趣的话题。翻译播客想做的事情很简单：找到值得听的交流，让它们跨过语言的边界。',
@@ -57,7 +57,7 @@ const projects = [
     quote: '好的对谈，会让你改变提问题的方式。', secondary: galleryImage('agi.webp')
   },
   {
-    id: 'future', number: '06', name: 'Future Atlas 未来志', english: 'FUTURE ATLAS', category: 'FUTURE / EDITORIAL', image: galleryImage('future.webp'),
+    id: 'future', name: 'Future Atlas 未来志', english: 'FUTURE ATLAS', category: 'FUTURE / EDITORIAL', image: galleryImage('future.webp'),
     title: '给尚未到来的世界，画一张地图。',
     lead: '一座关于未来的私人展览馆：AGI、太空算力、可控核聚变与具身智能。',
     story: 'Future Atlas 是我正在制作的未来学项目。它连接重要人物对于 AI、能源、太空和机器人技术的观点，并把不同预测放到同一条时间轴上。',
@@ -66,16 +66,7 @@ const projects = [
     quote: '不是预测明天，而是理解明天为什么可能发生。', secondary: galleryImage('agi.webp')
   },
   {
-    id: 'strategy', number: '07', name: '链上策略实验室', english: 'THE LAB', category: 'EXPERIMENT / TOOLS', image: galleryImage('strategy.webp'),
-    title: '把好奇心变成可以运行的东西。',
-    lead: '从金融工具到自动化脚本，把一个想法做成可以检验的原型。',
-    story: '我对工具有一种几乎本能的兴趣。看见一个重复发生的问题，我就会想：能不能让机器帮我处理？能不能把凭感觉的判断变成可验证的流程？',
-    detail: '这些实验并不保证成功。有些会成为长期使用的工具，有些则因为成本、复杂度或者不可靠而被放弃。对我来说，真正的价值是把想法放到现实里接受测试。',
-    steps: ['提出清晰、足够小的可验证问题。', '给数据质量、安全边界和失败场景留出位置。', '能停下来、能复盘，才值得继续迭代。'],
-    quote: '想法很便宜，真正运行起来才有意思。', secondary: galleryImage('research.webp')
-  },
-  {
-    id: 'members', number: '08', name: '会员社区', english: 'INNER CIRCLE', category: 'COMMUNITY / LIVE', image: galleryImage('members.webp'),
+    id: 'members', name: '会员社区', english: 'INNER CIRCLE', category: 'COMMUNITY / LIVE', image: galleryImage('members.webp'),
     title: '在公开内容之外，聊得更深入。',
     lead: '与一群认真思考市场的人一起讨论、提问、分歧和修正。',
     story: '会员社区是一个围绕加密市场、链上项目和真实投资思考建立的小范围交流空间。这里会有定期直播，也会讨论我正在研究什么、为什么改变想法，以及哪些问题还没有答案。',
@@ -84,7 +75,7 @@ const projects = [
     quote: '观点不是用来供奉的，是用来碰撞的。', secondary: galleryImage('podcast.webp')
   },
   {
-    id: 'about', number: '09', name: '关于 3D', english: 'SANDY', category: 'ABOUT / LIFE', image: galleryImage('about.webp'),
+    id: 'about', name: '关于 3D', english: 'SANDY', category: 'ABOUT / LIFE', image: galleryImage('about.webp'),
     title: '认真玩，尽兴活。',
     lead: '我是 Sandy，也叫 3D。创作者、研究者，以及一个总想折腾点新东西的人。',
     story: '以前主要在加密世界里找机会、做研究、讲故事。现在好奇的东西越来越多：人工智能、未来科技、投资，还有那些值得花很多年去理解的问题。',
@@ -93,10 +84,12 @@ const projects = [
     quote: '游戏人生。认真玩，尽兴活。', secondary: galleryImage('channel.webp'),
     link: xProfile, linkLabel: '关注 X @22333D',
   },
-].map((project) => ({
+].map((project, index) => ({
   ...project,
+  number: String(index + 1).padStart(2, '0'),
   previewImage: `${import.meta.env.BASE_URL}gallery-lite/${project.id}.webp`,
 }));
+const projectCount = String(projects.length).padStart(2, '0');
 
 function CloseIcon() {
   return <svg width="25" height="25" viewBox="0 0 25 25" aria-hidden="true"><path d="M4 4L21 21M21 4L4 21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>;
@@ -143,7 +136,7 @@ export function App() {
       <div className="detail-scroll" ref={detailRef} key={active.id}>
         <article className="case-study">
           <header className="case-heading">
-            <span className="case-index">{active.number} / 09 — {active.category}</span>
+            <span className="case-index">{active.number} / {projectCount} — {active.category}</span>
             <h2>{active.name}</h2>
             <p className="case-lead">{active.lead}</p>
             {active.link && <a href={active.link} target="_blank" rel="noopener noreferrer" className="solid-link case-visit">{active.linkLabel} <span aria-hidden="true">↗</span></a>}
@@ -157,7 +150,7 @@ export function App() {
         </article>
       </div>
       <div className="detail-top"><button className="wordmark" onClick={close} type="button" aria-label="返回首页">3D <span> / works</span></button><button className="detail-close" type="button" onClick={close} aria-label="关闭项目详情"><CloseIcon /></button></div>
-      <div className="detail-pager" aria-label="切换项目"><span className="pager-label">{active.number} — 09</span><button type="button" onClick={() => { const i = projects.findIndex((p) => p.id === selected); open(projects[(i - 1 + projects.length) % projects.length].id); }} aria-label="上一个项目">←</button><button type="button" onClick={() => {const i = projects.findIndex((p) => p.id === selected); open(projects[(i + 1) % projects.length].id);}} aria-label="下一个项目">→</button></div>
+      <div className="detail-pager" aria-label="切换项目"><span className="pager-label">{active.number} — {projectCount}</span><button type="button" onClick={() => { const i = projects.findIndex((p) => p.id === selected); open(projects[(i - 1 + projects.length) % projects.length].id); }} aria-label="上一个项目">←</button><button type="button" onClick={() => {const i = projects.findIndex((p) => p.id === selected); open(projects[(i + 1) % projects.length].id);}} aria-label="下一个项目">→</button></div>
     </section>}
 
     {showContact && !active && <div className="contact-backdrop" onClick={() => setShowContact(false)} role="presentation"><section className="contact-modal" role="dialog" aria-modal="true" aria-label="联系方式" onClick={(event) => event.stopPropagation()}><button type="button" className="contact-close" onClick={() => setShowContact(false)} aria-label="关闭联系方式"><CloseIcon /></button><span className="eyebrow">HELLO THERE</span><h2>聊点有意思的。</h2><p>关于加密、科技、内容创作，或者你正在做的一件有趣的事。</p><a href={xProfile} rel="noopener noreferrer" target="_blank" className="solid-link">在 X 上找到我 @22333D <span aria-hidden="true">↗</span></a><button type="button" className="contact-about" onClick={() => open('about')}>先了解我 →</button></section></div>}

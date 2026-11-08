@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getGalleryLayout, normalizeOffset, projectIndexAt } from './infiniteCanvasMath.js';
+import { GALLERY_TILE_COLUMNS, GALLERY_TILE_ROWS, getGalleryLayout, normalizeOffset, projectIndexAt } from './infiniteCanvasMath.js';
 
 const COLUMNS = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
 const ROWS = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
@@ -30,8 +30,8 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, introPla
   const panBy = useCallback((dx, dy) => {
     const { stepX, stepY } = layoutRef.current;
     const pan = panRef.current;
-    pan.x = normalizeOffset(pan.x + dx, stepX * 3);
-    pan.y = normalizeOffset(pan.y + dy, stepY * 3);
+    pan.x = normalizeOffset(pan.x + dx, stepX * GALLERY_TILE_COLUMNS);
+    pan.y = normalizeOffset(pan.y + dy, stepY * GALLERY_TILE_ROWS);
     draw();
   }, [draw]);
 
@@ -79,8 +79,8 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, introPla
       const next = getGalleryLayout(window.innerWidth);
       layoutRef.current = next;
       const pan = panRef.current;
-      pan.x = normalizeOffset(pan.x, next.stepX * 3);
-      pan.y = normalizeOffset(pan.y, next.stepY * 3);
+      pan.x = normalizeOffset(pan.x, next.stepX * GALLERY_TILE_COLUMNS);
+      pan.y = normalizeOffset(pan.y, next.stepY * GALLERY_TILE_ROWS);
       setLayout(next);
       draw();
     };
@@ -192,7 +192,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, introPla
       {ROWS.flatMap((row) => COLUMNS.map((column) => {
         const index = projectIndexAt(row, column, layout.mobile);
         const project = projects[index];
-        const centralTile = row >= 0 && row <= 2 && column >= -1 && column <= 1;
+        const centralTile = row >= 0 && row < GALLERY_TILE_ROWS && column >= -1 && column < GALLERY_TILE_COLUMNS - 1;
         const nearViewport = Math.abs(row) <= 2 && Math.abs(column) <= 2;
         return <button
           type="button"

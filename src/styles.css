@@ -54,7 +54,6 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
 .art-agi img{width:75%;max-height:67%}
 .art-podcast img{width:76%;max-height:72%}
 .art-future img{width:69%;max-height:72%}
-.art-strategy img{width:74%;max-height:72%}
 .art-members img{width:82%;max-height:71%}
 .art-about img{width:74%;max-height:72%}
 .art-overlay{position:absolute;inset:auto 20px 19px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;color:#343840;opacity:0;transform:translateY(6px);transition:opacity .22s ease,transform .22s ease;pointer-events:none}

@@ -1,11 +1,12 @@
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+export const GALLERY_TILE_COLUMNS = 4;
+export const GALLERY_TILE_ROWS = 2;
 
 export function positiveModulo(value, modulus) {
   return ((value % modulus) + modulus) % modulus;
 }
 
-// Keep the camera within one repeated three-column/three-row tile. Because
-// artwork repeats every three cells, the wrap is visually indistinguishable.
+// Keep the camera within one repeated tile so the wrap is visually indistinguishable.
 export function normalizeOffset(value, period) {
   if (!Number.isFinite(value) || !Number.isFinite(period) || period <= 0) return 0;
   return positiveModulo(value + period / 2, period) - period / 2;
@@ -13,7 +14,8 @@ export function normalizeOffset(value, period) {
 
 export function projectIndexAt(row, column, mobile = false) {
   const columnOffset = mobile ? 0 : 1;
-  return positiveModulo(row, 3) * 3 + positiveModulo(column + columnOffset, 3);
+  return positiveModulo(row, GALLERY_TILE_ROWS) * GALLERY_TILE_COLUMNS +
+    positiveModulo(column + columnOffset, GALLERY_TILE_COLUMNS);
 }
 
 export function getGalleryLayout(viewportWidth) {
