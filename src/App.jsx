@@ -76,9 +76,9 @@ const projects = [
     quote: '观点不是用来供奉的，是用来碰撞的。', secondary: '/gallery/podcast.webp'
   },
   {
-    id: 'about', number: '09', name: '关于郑智', english: 'ABOUT ME', category: 'PERSONAL / LIFE', image: '/gallery/about.webp',
+    id: 'about', number: '09', name: '关于 3D', english: 'SANDY', category: 'ABOUT / LIFE', image: '/gallery/about.webp',
     title: '认真玩，尽兴活。',
-    lead: '你好，我是郑智。创作者、研究者，以及一个总想折腾点新东西的人。',
+    lead: '我是 Sandy，也叫 3D。创作者、研究者，以及一个总想折腾点新东西的人。',
     story: '以前主要在加密世界里找机会、做研究、讲故事。现在好奇的东西越来越多：人工智能、未来科技、投资，还有那些值得花很多年去理解的问题。',
     detail: '这个网站是我的个人存档，也是一个小小的游乐场。你可以随便浏览这些作品。它们不一定彼此相关，但每一件背后，都有一段我真正想弄明白的东西。',
     steps: ['保持好奇，持续学习。', '把想明白的事讲清楚。', '认真做事，也别忘了好玩。'],
@@ -118,12 +118,12 @@ export function App() {
   }, [selected, close, open, showContact]);
 
   return <div className="site-shell">
-    <h1 className="sr-only">郑智 · Crypto3D — 业务与项目总览、无限作品画廊</h1>
+    <h1 className="sr-only">3D · Sandy — 业务与项目总览、无限作品画廊</h1>
     <InfiniteGallery projects={projects} onOpen={open} visible={!active && (!introReady || mode === 'canvas')} dismissed={Boolean(active)} onIntroFinished={finishIntro} />
     <BusinessOverview projects={projects} onOpen={open} onExplore={() => setMode('canvas')} visible={introReady && mode === 'overview' && !active} />
 
     {introReady && !active && <nav className="view-switch" aria-label="切换浏览模式">
-      <button type="button" className={mode === 'overview' ? 'is-selected' : ''} aria-pressed={mode === 'overview'} onClick={() => setMode('overview')}>总览 <span>09</span></button>
+      <button type="button" className={mode === 'overview' ? 'is-selected' : ''} aria-pressed={mode === 'overview'} onClick={() => setMode('overview')}>总览</button>
       <button type="button" className={mode === 'canvas' ? 'is-selected' : ''} aria-pressed={mode === 'canvas'} onClick={() => setMode('canvas')}>自由画布 <span>↗</span></button>
     </nav>}
 
@@ -135,16 +135,16 @@ export function App() {
           <div className="case-copy"><div className="case-section-label">01 / THE STORY</div><div className="case-prose"><h3>{active.title}</h3><p>{active.story}</p><p>{active.detail}</p></div></div>
           <div className="case-art case-art-secondary"><img src={active.secondary} alt={`${active.name} 相关视觉作品`} loading="lazy" /></div>
           <div className="case-copy"><div className="case-section-label">02 / THE APPROACH</div><div className="case-prose"><h3>我是怎么思考这件事的</h3><div className="case-methods">{active.steps.map((line, i) => <div className="method" key={line}><span>0{i + 1}</span><p>{line}</p></div>)}</div></div></div>
-          <blockquote className="case-quote">“{active.quote}”<span>— 郑智 · Crypto3D</span></blockquote>
+          <blockquote className="case-quote">“{active.quote}”<span>— 3D</span></blockquote>
           <nav className="case-bottom" aria-label="作品导航"><div><span className="case-section-label">03 / NEXT STORY</span><h3>还有很多故事，慢慢讲。</h3></div><div className="case-links">{active.link && <a href={active.link} target="_blank" rel="noopener noreferrer" className="solid-link">访问项目 <span>↗</span></a>}<button type="button" className="outline-link" onClick={close}>返回画廊 <span>↗</span></button></div></nav>
         </article>
       </div>
-      <div className="detail-top"><button className="wordmark" onClick={close} type="button" aria-label="返回画廊">Z.Zhi <span> / works</span></button><button className="detail-close" type="button" onClick={close} aria-label="关闭项目详情"><CloseIcon /></button></div>
+      <div className="detail-top"><button className="wordmark" onClick={close} type="button" aria-label="返回画廊">3D <span> / works</span></button><button className="detail-close" type="button" onClick={close} aria-label="关闭项目详情"><CloseIcon /></button></div>
       <div className="detail-pager" aria-label="切换项目"><span className="pager-label">{active.number} — 09</span><button type="button" onClick={() => { const i = projects.findIndex((p) => p.id === selected); open(projects[(i - 1 + projects.length) % projects.length].id); }} aria-label="上一个项目">←</button><button type="button" onClick={() => {const i = projects.findIndex((p) => p.id === selected); open(projects[(i + 1) % projects.length].id);}} aria-label="下一个项目">→</button></div>
     </section>}
 
     <footer className="fixed-footer" aria-hidden={Boolean(active) || mode === 'overview'}>
-      <div className="footer-signature"><span className="signature">Z.Zhi</span><span className="dot">·</span><span>© 2026 Crypto3D</span></div>
+      <div className="footer-signature"><span className="signature">3D</span><span className="dot">·</span><span>© 2026 Crypto3D</span></div>
       <div className="footer-actions"><a href="https://crypto3d.pro" target="_blank" rel="noopener noreferrer" aria-label="访问 Crypto3D.pro" className="footer-icon"><ContactIcon kind="arrow" /></a><button type="button" className="footer-icon" aria-label="联系我" onClick={() => setShowContact(true)}><ContactIcon /></button><button type="button" className="talk-button" onClick={() => setShowContact(true)}>Let's talk</button></div>
     </footer>
     {showContact && !active && <div className="contact-backdrop" onClick={() => setShowContact(false)} role="presentation"><section className="contact-modal" role="dialog" aria-modal="true" aria-label="联系方式" onClick={(event) => event.stopPropagation()}><button type="button" className="contact-close" onClick={() => setShowContact(false)} aria-label="关闭联系方式"><CloseIcon /></button><span className="eyebrow">HELLO THERE</span><h2>聊点有意思的。</h2><p>关于加密、科技、内容创作，或者你正在做的一件有趣的事。</p><a href="https://crypto3d.pro" rel="noopener noreferrer" target="_blank" className="solid-link">访问 Crypto3D.pro <span>↗</span></a><button type="button" className="contact-about" onClick={() => open('about')}>先了解我 →</button></section></div>}
