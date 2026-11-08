@@ -44,33 +44,31 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
   100%{opacity:0}
 }
 
-/* The preview moves a single strip through the viewport. */
-.intro-curtain-film{background:radial-gradient(ellipse at center,#fff 30%,#eef0f4 100%)}
-.intro-film-strip{
-  --frame-width:clamp(146px,22vw,336px);
-  --sprocket-size:clamp(13px,1.55vw,24px);
-  position:absolute;left:0;top:50%;display:flex;width:max-content;
-  gap:clamp(5px,.55vw,9px);padding:var(--sprocket-size) 10px;
-  background:linear-gradient(180deg,#303136,#18191d 20%,#18191d 80%,#303136);
-  box-shadow:0 16px 46px rgba(18,20,28,.18);
-  animation:intro-film-travel var(--intro-duration) cubic-bezier(.24,.14,.76,.88) both;
-  will-change:transform;
+/* Independent covers cross the stage with a short, sharp moment in the middle. */
+.intro-curtain-sweep{
+  background:radial-gradient(ellipse at center,#fff 36%,#f1f2f5 100%);
+  animation-name:intro-sweep-reveal;
 }
-.intro-film-strip::before,.intro-film-strip::after{
-  content:'';position:absolute;left:0;right:0;height:calc(var(--sprocket-size) * .48);
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Crect x='4' y='1' width='15' height='10' rx='2' fill='%23e9eaed'/%3E%3C/svg%3E") repeat-x left center / var(--sprocket-size) 100%;
-  opacity:.84;
+.intro-sweep-card{
+  position:absolute;left:50%;top:var(--sweep-lane);
+  width:calc(clamp(150px,27vw,370px) * var(--sweep-scale));aspect-ratio:1.54;
+  display:grid;place-items:center;overflow:hidden;pointer-events:none;
+  border:1px solid rgba(212,215,222,.62);border-radius:clamp(10px,1.25vw,18px);background:#f8f8fa;
+  box-shadow:0 12px 28px rgba(29,33,45,.12);
+  animation:intro-sweep-pass var(--sweep-duration) linear var(--sweep-delay) both;
 }
-.intro-film-strip::before{top:calc(var(--sprocket-size) * .26)}
-.intro-film-strip::after{bottom:calc(var(--sprocket-size) * .26)}
-.intro-film-frame{
-  flex:none;width:var(--frame-width);aspect-ratio:1.54;
-  display:grid;place-items:center;overflow:hidden;border-radius:3px;background:#f4f5f7;
+.intro-sweep-card img{display:block;width:88%;height:88%;object-fit:contain;user-select:none}
+@keyframes intro-sweep-pass{
+  0%{opacity:0;filter:blur(20px);transform:translate3d(calc(65vw - 50%),calc(-50% - var(--sweep-drift)),0) scale(1.18,.96)}
+  18%,82%{opacity:.94}
+  24%,76%{filter:blur(11px)}
+  39%{opacity:1;filter:blur(.7px);transform:translate3d(calc(15vw - 50%),calc(-50% - var(--sweep-drift) * .22),0) scale(1.02,1)}
+  61%{opacity:1;filter:blur(.7px);transform:translate3d(calc(-15vw - 50%),calc(-50% + var(--sweep-drift) * .22),0) scale(1.02,1)}
+  100%{opacity:0;filter:blur(23px);transform:translate3d(calc(-65vw - 50%),calc(-50% + var(--sweep-drift)),0) scale(1.2,.96)}
 }
-.intro-film-frame img{display:block;width:86%;height:86%;object-fit:contain;user-select:none;pointer-events:none}
-@keyframes intro-film-travel{
-  from{transform:translate3d(calc(100vw - var(--frame-width) * .46),-50%,0)}
-  to{transform:translate3d(-100%,-50%,0)}
+@keyframes intro-sweep-reveal{
+  0%,89%{opacity:1}
+  100%{opacity:0}
 }
 
 .art-card{position:absolute;appearance:none;display:flex;align-items:center;justify-content:center;overflow:hidden;border:0;border-radius:26px;background:#f5f6f8;padding:0;isolation:isolate;outline-offset:5px;cursor:pointer;transition:background-color .2s ease,transform .24s cubic-bezier(.22,1,.36,1)}
