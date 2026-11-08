@@ -102,6 +102,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
 .case-index,.case-section-label{font-size:11px;color:#a2a4ac;font-weight:550;letter-spacing:.145em}
 .case-heading h2{font-weight:500;font-size:clamp(44px,5.7vw,78px);letter-spacing:-.073em;line-height:1.2;margin:33px 0 22px}
 .case-lead{color:#55585d;font-size:clamp(17px,2vw,21px);line-height:1.78;letter-spacing:-.025em;margin:0}
+.case-visit{margin-top:24px}
 .case-art{width:100%;aspect-ratio:1.5;background:#f5f6f8;display:flex;justify-content:center;align-items:center;border-radius:22px;padding:7%}
 .case-art img{width:100%;height:100%;object-fit:contain}
 .case-art-secondary{margin-top:16px;aspect-ratio:1.8;background:#f6f7f9}

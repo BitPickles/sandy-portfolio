@@ -8,6 +8,7 @@
 - Reveal the complete homepage during the ninth cover's exit. Keep the directory and its ambient background in the same reveal, with no standalone canvas or pause between the opening and the homepage.
 - The user selected the original 2.7-second opening after reviewing the filmstrip and fast sweep previews. Use the original alternating cover paths for the live opening.
 - Use lightweight covers in the opening, ambient canvas, and homepage preview. Prioritize the first cover and keep the original full-resolution artwork in project details.
+- Use the supplied public destinations and verified branding for the YouTube channel, Crypto3D 数据站, 什么值得挖, and X. Identify 什么值得挖 as a member sign-in entry when linking to its public landing page.
 - The user no longer wants a separate infinite-canvas browsing mode. Reuse the nine-image infinite field **only as a gently, continuously moving ambient background** under a tasteful transparent/frosted-glass directory. No duplicate canvas entry CTA, mode toggle, or independent gallery interaction.
 - The background must not intercept foreground interactions, should pause behind a detailed story, and must stop moving for visitors who prefer reduced motion. Returning from a project must not replay the cinematic opening.
 - Favor refined light editorial typography, existing original artwork, restrained translucency, strong text contrast, and satisfying motion; no decorative sphere or unrelated floating object.
