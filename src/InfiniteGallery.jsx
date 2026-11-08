@@ -209,7 +209,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, introPla
           aria-hidden={ambient || !centralTile}
           aria-label={`打开作品：${project.name}`}
         >
-          <img src={project.image} alt="" loading={nearViewport ? 'eager' : 'lazy'} draggable="false" />
+          <img src={project.previewImage} alt="" loading={nearViewport ? 'eager' : 'lazy'} draggable="false" />
           <span className="art-overlay"><span className="art-name">{project.name}</span><span className="art-category">{project.category}</span></span>
         </button>;
       }))}

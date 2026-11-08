@@ -1,8 +1,33 @@
+import { useEffect, useRef, useState } from 'react';
 import { FLIGHT_DURATION_MS, FLIGHT_PATHS, INTRO_DURATION_MS, flightDelayAt } from './galleryIntroConfig.js';
 
+const COVER_WAIT_LIMIT_MS = 1500;
+
 export function GalleryIntro({ projects, onFinish }) {
+  const curtainRef = useRef(null);
+  const [coversReady, setCoversReady] = useState(false);
+
+  useEffect(() => {
+    const covers = Array.from(curtainRef.current.querySelectorAll('img'));
+    let cancelled = false;
+    const settle = (ready) => {
+      if (cancelled) return;
+      cancelled = true;
+      window.clearTimeout(timeout);
+      if (ready) setCoversReady(true);
+      else onFinish();
+    };
+    const timeout = window.setTimeout(() => settle(false), COVER_WAIT_LIMIT_MS);
+    Promise.all(covers.map((cover) => cover.decode())).then(() => settle(true), () => settle(false));
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeout);
+    };
+  }, [onFinish]);
+
   return <div
-    className="intro-curtain"
+    ref={curtainRef}
+    className={`intro-curtain${coversReady ? '' : ' is-preloading'}`}
     aria-hidden="true"
     style={{ '--intro-duration': `${INTRO_DURATION_MS}ms` }}
     onPointerDown={onFinish}
@@ -27,7 +52,7 @@ export function GalleryIntro({ projects, onFinish }) {
           zIndex: index + 1,
         }}
       >
-        <img src={project.image} alt="" loading="eager" draggable="false" />
+        <img src={project.previewImage} alt="" loading="eager" fetchPriority={index === 0 ? 'high' : undefined} draggable="false" />
       </div>;
     })}
   </div>;

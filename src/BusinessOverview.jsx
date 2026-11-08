@@ -27,7 +27,7 @@ export function BusinessOverview({ projects, onOpen, onContact, visible, introPl
 
           <div className="overview-feature" aria-live="polite">
             <div className={`overview-feature-mat art-${focusProject.id}`} key={focusProject.id}>
-              <img src={focusProject.image} alt={`${focusProject.name} 的项目封面`} />
+              <img src={focusProject.previewImage} alt={`${focusProject.name} 的项目封面`} />
             </div>
             <div className="overview-feature-caption"><span>{focusProject.number}</span><span>{focusProject.name}</span></div>
           </div>

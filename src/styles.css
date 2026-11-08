@@ -24,6 +24,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
 
 /* Reveal the entire homepage together during the final cover's exit. */
 .intro-curtain{position:absolute;inset:0;z-index:30;overflow:hidden;background:#fff;perspective:1100px;touch-action:none;animation:intro-curtain-away var(--intro-duration) both linear}
+.intro-curtain.is-preloading,.intro-curtain.is-preloading .intro-fly-card{animation-play-state:paused}
 .intro-fly-card{position:absolute;left:50%;top:50%;width:clamp(320px,42vw,620px);aspect-ratio:1.493 / 1;display:flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate;border-radius:25px;background:#f5f6f8;box-shadow:0 16px 85px rgba(20,22,30,.065);pointer-events:none;backface-visibility:hidden;will-change:transform,filter,opacity;opacity:0;animation:project-whip var(--fly-duration) cubic-bezier(.36,.02,.62,.99) var(--fly-delay) both}
 .intro-fly-card img{display:block;width:73%;height:auto;max-height:73%;object-fit:contain;user-select:none;pointer-events:none}
 .intro-fly-card.art-research img{width:62%}

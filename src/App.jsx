@@ -88,7 +88,10 @@ const projects = [
     steps: ['保持好奇，持续学习。', '把想明白的事讲清楚。', '认真做事，也别忘了好玩。'],
     quote: '游戏人生。认真玩，尽兴活。', secondary: galleryImage('channel.webp'), link: 'https://crypto3d.pro'
   },
-];
+].map((project) => ({
+  ...project,
+  previewImage: `${import.meta.env.BASE_URL}gallery-lite/${project.id}.webp`,
+}));
 
 function CloseIcon() {
   return <svg width="25" height="25" viewBox="0 0 25 25" aria-hidden="true"><path d="M4 4L21 21M21 4L4 21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>;
