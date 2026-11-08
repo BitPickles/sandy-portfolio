@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { InfiniteGallery } from './InfiniteGallery.jsx';
 import { BusinessOverview } from './BusinessOverview.jsx';
+import { GalleryIntro } from './GalleryIntro.jsx';
 
 const galleryImage = (filename) => `${import.meta.env.BASE_URL}gallery/${filename}`;
+const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
 
 const projects = [
   {
@@ -94,29 +96,40 @@ function CloseIcon() {
 
 export function App() {
   const [selected, setSelected] = useState(null);
-  const [introReady, setIntroReady] = useState(false);
+  const [introPlaying, setIntroPlaying] = useState(() => typeof window !== 'undefined' && !window.matchMedia?.(reducedMotionQuery).matches);
   const [showContact, setShowContact] = useState(false);
   const detailRef = useRef(null);
   const active = projects.find((p) => p.id === selected);
 
   const open = useCallback((id) => {setSelected(id); setShowContact(false);}, []);
   const close = useCallback(() => {setSelected(null); setShowContact(false);}, []);
-  const finishIntro = useCallback(() => setIntroReady(true), []);
+  const finishIntro = useCallback(() => setIntroPlaying(false), []);
   useEffect(() => { if (detailRef.current) detailRef.current.scrollTop = 0; }, [selected]);
   useEffect(() => {
+    if (!introPlaying) return;
+    const motion = window.matchMedia?.(reducedMotionQuery);
+    if (!motion) return;
+    const skipIfReduced = ({ matches }) => { if (matches) finishIntro(); };
+    skipIfReduced(motion);
+    motion.addEventListener('change', skipIfReduced);
+    return () => motion.removeEventListener('change', skipIfReduced);
+  }, [introPlaying, finishIntro]);
+  useEffect(() => {
     const handler = (event) => {
+      if (introPlaying && event.key === 'Escape') { finishIntro(); return; }
       if (event.key === 'Escape') { if (showContact) setShowContact(false); else if (selected) close(); }
       if (selected && event.key === 'ArrowRight') { const index = projects.findIndex((p) => p.id === selected); open(projects[(index + 1) % projects.length].id); }
       if (selected && event.key === 'ArrowLeft') { const index = projects.findIndex((p) => p.id === selected); open(projects[(index - 1 + projects.length) % projects.length].id); }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [selected, close, open, showContact]);
+  }, [selected, close, open, showContact, introPlaying, finishIntro]);
 
   return <div className="site-shell">
     <h1 className="sr-only">3D · Sandy — 业务与项目目录、动态作品背景</h1>
-    <InfiniteGallery projects={projects} onOpen={open} visible={!active} dismissed={Boolean(active)} onIntroFinished={finishIntro} ambient />
-    <BusinessOverview projects={projects} onOpen={open} onContact={() => setShowContact(true)} visible={introReady && !active} />
+    <InfiniteGallery projects={projects} onOpen={open} visible={!active} dismissed={Boolean(active)} introPlaying={introPlaying} ambient />
+    <BusinessOverview projects={projects} onOpen={open} onContact={() => setShowContact(true)} visible={!active} introPlaying={introPlaying} />
+    {introPlaying && <GalleryIntro projects={projects} onFinish={finishIntro} />}
 
     {active && <section className="detail-screen" aria-label={`作品详情：${active.name}`}>
       <div className="detail-scroll" ref={detailRef} key={active.id}>

@@ -18,15 +18,12 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
 .gallery-screen.is-dragging .art-card{cursor:grabbing}
 .infinite-stage{position:absolute;inset:0;z-index:1;transform-origin:center center}
 .infinite-field{position:absolute;inset:0;will-change:transform;transform:translate3d(0,0,0)}
-.gallery-screen.intro-playing{cursor:default}
-.gallery-screen.intro-playing .infinite-field{pointer-events:none}
-.gallery-screen.gallery-ambient:not(.intro-playing){pointer-events:none;cursor:default}
+.gallery-screen.gallery-ambient{pointer-events:none;cursor:default}
 .gallery-ambient .art-card{cursor:default}
 .gallery-ambient .art-overlay{display:none}
 
-/* Nine real covers flash past in varied diagonals. The full original canvas
-   then resolves from depth, ending at an exactly untransformed resting frame. */
-.intro-curtain{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none;background:#fff;perspective:1100px;animation:intro-curtain-away var(--intro-duration) both linear}
+/* Reveal the entire homepage together during the final cover's exit. */
+.intro-curtain{position:absolute;inset:0;z-index:30;overflow:hidden;background:#fff;perspective:1100px;touch-action:none;animation:intro-curtain-away var(--intro-duration) both linear}
 .intro-fly-card{position:absolute;left:50%;top:50%;width:clamp(320px,42vw,620px);aspect-ratio:1.493 / 1;display:flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate;border-radius:25px;background:#f5f6f8;box-shadow:0 16px 85px rgba(20,22,30,.065);pointer-events:none;backface-visibility:hidden;will-change:transform,filter,opacity;opacity:0;animation:project-whip var(--fly-duration) cubic-bezier(.36,.02,.62,.99) var(--fly-delay) both}
 .intro-fly-card img{display:block;width:73%;height:auto;max-height:73%;object-fit:contain;user-select:none;pointer-events:none}
 .intro-fly-card.art-research img{width:62%}
@@ -34,7 +31,6 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
 .intro-fly-card.art-members img{width:82%}
 .intro-fly-card.art-podcast img{width:76%}
 .intro-fly-card.art-future img{width:69%}
-.infinite-stage.canvas-arrival{will-change:transform,opacity,filter;animation:canvas-resolve var(--intro-duration) cubic-bezier(.2,.7,.2,1) both}
 @keyframes project-whip{
   0%{opacity:0;filter:blur(20px);transform:translate3d(calc(-50% + var(--fly-from-x)),calc(-50% + var(--fly-from-y)),-380px) rotateZ(var(--fly-entry-tilt)) rotateY(12deg) scale(.7)}
   13%{opacity:.96;filter:blur(8px)}
@@ -44,21 +40,9 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
   100%{opacity:0;filter:blur(26px);transform:translate3d(calc(-50% + var(--fly-exit-x)),calc(-50% + var(--fly-exit-y)),500px) rotateZ(var(--fly-exit-tilt)) rotateY(-12deg) scale(1.75)}
 }
 @keyframes intro-curtain-away{
-  0%,64%{opacity:1}
-  82%,100%{opacity:0}
+  0%,94%{opacity:1}
+  100%{opacity:0}
 }
-@keyframes canvas-resolve{
-  0%,63%{opacity:0;filter:blur(16px);transform:perspective(1200px) translate3d(0,64px,-200px) rotateX(4deg) scale(.78)}
-  76%{opacity:.98;filter:blur(4px);transform:perspective(1200px) translate3d(0,-14px,0) rotateX(-.7deg) scale(1.045)}
-  90%{opacity:1;filter:blur(.4px);transform:translate3d(0,3px,0) scale(.993)}
-  100%{opacity:1;filter:blur(0);transform:translate3d(0,0,0) scale(1)}
-}
-@keyframes gallery-chrome-in{
-  0%,79%{opacity:0}
-  100%{opacity:1}
-}
-.site-shell:has(.gallery-screen.intro-playing) .gallery-close,
-.site-shell:has(.gallery-screen.intro-playing) .fixed-footer{animation:gallery-chrome-in var(--intro-duration,2700ms) both;pointer-events:none}
 .art-card{position:absolute;appearance:none;display:flex;align-items:center;justify-content:center;overflow:hidden;border:0;border-radius:26px;background:#f5f6f8;padding:0;isolation:isolate;outline-offset:5px;cursor:pointer;transition:background-color .2s ease,transform .24s cubic-bezier(.22,1,.36,1)}
 .art-card:hover{background:#f0f2f5;transform:translateY(-3px)}
 .art-card img{display:block;width:72%;height:auto;max-height:73%;object-fit:contain;user-select:none;pointer-events:none;transition:transform .38s cubic-bezier(.2,.78,.27,1)}

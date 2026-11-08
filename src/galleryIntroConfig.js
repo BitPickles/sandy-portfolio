@@ -1,6 +1,5 @@
-export const INTRO_DURATION_MS = 2700;
-export const FLIGHT_DURATION_MS = 850;
-export const FLIGHT_STAGGER_MS = 165;
+export const FLIGHT_DURATION_MS = 860;
+export const FLIGHT_STAGGER_MS = 230;
 
 // The alternating diagonals make a fast editorial flip-through, rather than
 // nine cards moving down the same line. Distances are viewport-relative.
@@ -20,7 +19,4 @@ export function flightDelayAt(index) {
   return index * FLIGHT_STAGGER_MS;
 }
 
-export function introCoversAllProjects(projects) {
-  return projects.length === FLIGHT_PATHS.length &&
-    flightDelayAt(projects.length - 1) + FLIGHT_DURATION_MS < INTRO_DURATION_MS;
-}
+export const INTRO_DURATION_MS = flightDelayAt(FLIGHT_PATHS.length - 1) + FLIGHT_DURATION_MS;

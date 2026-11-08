@@ -1,25 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getGalleryLayout, normalizeOffset, projectIndexAt } from './infiniteCanvasMath.js';
-import { GalleryIntro } from './GalleryIntro.jsx';
-import { INTRO_DURATION_MS } from './galleryIntroConfig.js';
 
 const COLUMNS = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
 const ROWS = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
 const DRAG_THRESHOLD = 7;
 
-function wantsOpeningAnimation() {
-  return typeof window !== 'undefined' &&
-    !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-}
-
-export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroFinished, ambient = false }) {
+export function InfiniteGallery({ projects, onOpen, visible, dismissed, introPlaying, ambient = false }) {
   const surfaceRef = useRef(null);
   const fieldRef = useRef(null);
   const panRef = useRef({ x: 0, y: 0 });
   const motionRef = useRef(null);
   const dragRef = useRef(null);
   const suppressClickRef = useRef(false);
-  const [introPlaying, setIntroPlaying] = useState(wantsOpeningAnimation);
   const [layout, setLayout] = useState(() => getGalleryLayout(typeof window === 'undefined' ? 1440 : window.innerWidth));
   const layoutRef = useRef(layout);
   layoutRef.current = layout;
@@ -42,20 +34,6 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
     pan.y = normalizeOffset(pan.y + dy, stepY * 3);
     draw();
   }, [draw]);
-
-  useEffect(() => {
-    if (!introPlaying) return undefined;
-    const timer = window.setTimeout(() => setIntroPlaying(false), INTRO_DURATION_MS);
-    return () => window.clearTimeout(timer);
-  }, [introPlaying]);
-
-  useEffect(() => {
-    if (!introPlaying) onIntroFinished?.();
-  }, [introPlaying, onIntroFinished]);
-
-  useEffect(() => {
-    if (!visible && introPlaying) setIntroPlaying(false);
-  }, [visible, introPlaying]);
 
   // The original seamless canvas also works as an ambient, non-interactive
   // backdrop. Move the existing field rather than animating 81 individual cards.
@@ -114,12 +92,8 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
     const surface = surfaceRef.current;
     if (!surface) return undefined;
     const wheel = (event) => {
-      if (ambient || !visible || event.ctrlKey) return;
+      if (ambient || !visible || introPlaying || event.ctrlKey) return;
       event.preventDefault();
-      if (introPlaying) {
-        setIntroPlaying(false);
-        return;
-      }
       stopMotion();
       const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
       const dx = event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX;
@@ -128,7 +102,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
     };
     surface.addEventListener('wheel', wheel, { passive: false });
     return () => surface.removeEventListener('wheel', wheel);
-  }, [introPlaying, panBy, stopMotion, visible]);
+  }, [ambient, introPlaying, panBy, stopMotion, visible]);
 
   useEffect(() => {
     if (!visible) stopMotion();
@@ -137,15 +111,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
   useEffect(() => () => stopMotion(), [stopMotion]);
 
   const pointerDown = (event) => {
-    if (ambient) {
-      if (introPlaying) setIntroPlaying(false);
-      return;
-    }
-    if (!visible || (event.pointerType === 'mouse' && event.button !== 0)) return;
-    if (introPlaying) {
-      setIntroPlaying(false);
-      return;
-    }
+    if (ambient || !visible || introPlaying || (event.pointerType === 'mouse' && event.button !== 0)) return;
     stopMotion();
     dragRef.current = {
       id: event.pointerId,
@@ -197,11 +163,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
   };
 
   const keyDown = (event) => {
-    if (ambient || !visible) return;
-    if (introPlaying) {
-      setIntroPlaying(false);
-      return;
-    }
+    if (ambient || !visible || introPlaying) return;
     const movement = 110;
     if (event.key === 'ArrowLeft') panBy(movement, 0);
     else if (event.key === 'ArrowRight') panBy(-movement, 0);
@@ -214,8 +176,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
 
   return <section
     ref={surfaceRef}
-    className={`gallery-screen ${ambient ? 'gallery-ambient' : ''} ${dismissed ? 'gallery-dismissed' : ''} ${introPlaying ? 'intro-playing' : ''}`}
-    style={{ '--intro-duration': `${INTRO_DURATION_MS}ms` }}
+    className={`gallery-screen ${ambient ? 'gallery-ambient' : ''} ${dismissed ? 'gallery-dismissed' : ''}`}
     aria-hidden={ambient || !visible}
     aria-busy={introPlaying}
     aria-label="可上下左右拖动的无限作品画廊"
@@ -226,7 +187,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
     onPointerCancel={pointerEnd}
     onKeyDown={keyDown}
   >
-    <div className={`infinite-stage ${introPlaying ? 'canvas-arrival' : ''}`}>
+    <div className="infinite-stage">
       <div className="infinite-field" ref={fieldRef}>
       {ROWS.flatMap((row) => COLUMNS.map((column) => {
         const index = projectIndexAt(row, column, layout.mobile);
@@ -254,6 +215,5 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
       }))}
       </div>
     </div>
-    {introPlaying && <GalleryIntro projects={projects} />}
   </section>;
 }

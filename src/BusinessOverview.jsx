@@ -7,11 +7,12 @@ const SECTIONS = [
   { id: 'future', number: '03', name: '探索', ids: ['future', 'agi', 'podcast'] },
 ];
 
-export function BusinessOverview({ projects, onOpen, onContact, visible }) {
+export function BusinessOverview({ projects, onOpen, onContact, visible, introPlaying }) {
   const [focusId, setFocusId] = useState('channel');
   const projectById = Object.fromEntries(projects.map((project) => [project.id, project]));
   const focusProject = projectById[focusId] || projects[0];
-  return <section className={`overview-screen ${visible ? 'is-visible' : ''}`} aria-label="业务与作品总览" aria-hidden={!visible} inert={!visible}>
+  const canInteract = visible && !introPlaying;
+  return <section className={`overview-screen ${visible ? 'is-visible' : ''}`} aria-label="业务与作品总览" aria-hidden={!canInteract} inert={!canInteract}>
     <div className="overview-halo" aria-hidden="true" />
     <div className="overview-content">
       <header className="overview-header">

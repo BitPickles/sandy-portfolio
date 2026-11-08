@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getGalleryLayout, normalizeOffset, positiveModulo, projectIndexAt } from '../src/infiniteCanvasMath.js';
-import { FLIGHT_DURATION_MS, FLIGHT_PATHS, FLIGHT_STAGGER_MS, INTRO_DURATION_MS, flightDelayAt, introCoversAllProjects } from '../src/galleryIntroConfig.js';
+import { FLIGHT_DURATION_MS, FLIGHT_PATHS, FLIGHT_STAGGER_MS, INTRO_DURATION_MS, flightDelayAt } from '../src/galleryIntroConfig.js';
 
 test('a three-by-three region contains all nine projects exactly once', () => {
   const projects = [];
@@ -52,12 +52,11 @@ test('mobile begins with the first work, yet has all nine works across the field
   assert.equal(seen.size, 9);
 });
 
-test('cinematic intro passes all nine distinct cards and finishes within three seconds', () => {
+test('cinematic intro ends with the ninth card, without a separate hold', () => {
   assert.equal(FLIGHT_PATHS.length, 9);
   assert.ok(INTRO_DURATION_MS >= 2000 && INTRO_DURATION_MS <= 3000);
-  assert.ok(introCoversAllProjects(Array.from({ length: 9 })));
   assert.equal(flightDelayAt(0), 0);
   assert.equal(flightDelayAt(8), 8 * FLIGHT_STAGGER_MS);
-  assert.ok(flightDelayAt(8) + FLIGHT_DURATION_MS < INTRO_DURATION_MS);
+  assert.equal(flightDelayAt(8) + FLIGHT_DURATION_MS, INTRO_DURATION_MS);
   assert.ok(new Set(FLIGHT_PATHS.map((path) => path.join(','))).size === 9);
 });

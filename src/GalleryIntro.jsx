@@ -1,7 +1,13 @@
-import { FLIGHT_DURATION_MS, FLIGHT_PATHS, flightDelayAt } from './galleryIntroConfig.js';
+import { FLIGHT_DURATION_MS, FLIGHT_PATHS, INTRO_DURATION_MS, flightDelayAt } from './galleryIntroConfig.js';
 
-export function GalleryIntro({ projects }) {
-  return <div className="intro-curtain" aria-hidden="true">
+export function GalleryIntro({ projects, onFinish }) {
+  return <div
+    className="intro-curtain"
+    aria-hidden="true"
+    style={{ '--intro-duration': `${INTRO_DURATION_MS}ms` }}
+    onPointerDown={onFinish}
+    onAnimationEnd={(event) => { if (event.target === event.currentTarget) onFinish(); }}
+  >
     {projects.map((project, index) => {
       const [fromX, fromY, midX, midY, exitX, exitY, entryTilt, exitTilt] = FLIGHT_PATHS[index];
       return <div
