@@ -1,12 +1,13 @@
 # Prototype Instructions
 
-## Dual-mode demo direction (user-requested, 2026-11-08)
+## Ambient infinite canvas homepage (latest user direction, 2026-11-08)
 
 - This directory is a separate **Demo** copied from the original Crypto3D gallery Site; do not change or publish over the original Site.
-- Preserve all nine existing image assets, the 2.7-second real-project cinematic opening, the fast long-form case studies, and the seamless draggable infinite canvas.
-- After the cinematic opening, reveal a highly legible, polished **Overview / Index** with three terse groups (业务、研究、探索), direct links to eight projects, and a standalone 关于 3D entry. Never equate nine tiles with nine independent businesses.
-- Provide a clear, reversible **总览 ↔ 自由画布** toggle; switching modes and returning from project detail must not replay the cinematic opening or reset the underlying canvas pan state.
-- Favor refined light editorial typography, existing original artwork, restrained translucency, and satisfying motion; no decorative sphere or unrelated floating object.
+- Preserve all nine existing image assets, the 2.7-second real-project cinematic opening, the fast long-form case studies, and the mathematically seamless two-dimensional canvas.
+- After the cinematic opening, show **one homepage**: an editorial project directory with three terse groups (业务、研究、探索), eight projects, and a standalone 关于 3D entry. Never equate nine tiles with nine independent businesses.
+- The user no longer wants a separate infinite-canvas browsing mode. Reuse the nine-image infinite field **only as a gently, continuously moving ambient background** under a tasteful transparent/frosted-glass directory. No duplicate canvas entry CTA, mode toggle, or independent gallery interaction.
+- The background must not intercept foreground interactions, should pause behind a detailed story, and must stop moving for visitors who prefer reduced motion. Returning from a project must not replay the cinematic opening.
+- Favor refined light editorial typography, existing original artwork, restrained translucency, strong text contrast, and satisfying motion; no decorative sphere or unrelated floating object.
 - **Naming and copy update:** Never surface the user's real name anywhere in the Site (page copy, metadata, quotes, details, or footer). Public shorthand and signature: **3D**. Full alias: **Sandy**. Remove decorative text counters and repetitive labels such as 个人档案, 研究与新项目, and bilingual metadata in the overview. Let the project list itself explain the breadth.
 
 ## Durable creative direction (user-confirmed, 2026-11-08; overrides older orb ideas)

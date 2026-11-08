@@ -90,14 +90,8 @@ function CloseIcon() {
   return <svg width="25" height="25" viewBox="0 0 25 25" aria-hidden="true"><path d="M4 4L21 21M21 4L4 21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>;
 }
 
-function ContactIcon({ kind }) {
-  if (kind === 'arrow') return <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17L17 3M6 3h11v11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>;
-  return <svg width="19" height="19" viewBox="0 0 19 19" aria-hidden="true"><path d="M2 3h15v13H2zM2 3l7.5 7L17 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinejoin="round"/></svg>;
-}
-
 export function App() {
   const [selected, setSelected] = useState(null);
-  const [mode, setMode] = useState('overview');
   const [introReady, setIntroReady] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const detailRef = useRef(null);
@@ -109,7 +103,7 @@ export function App() {
   useEffect(() => { if (detailRef.current) detailRef.current.scrollTop = 0; }, [selected]);
   useEffect(() => {
     const handler = (event) => {
-      if (event.key === 'Escape') { if (showContact) setShowContact(false); else if (selected) close(); else setMode('overview'); }
+      if (event.key === 'Escape') { if (showContact) setShowContact(false); else if (selected) close(); }
       if (selected && event.key === 'ArrowRight') { const index = projects.findIndex((p) => p.id === selected); open(projects[(index + 1) % projects.length].id); }
       if (selected && event.key === 'ArrowLeft') { const index = projects.findIndex((p) => p.id === selected); open(projects[(index - 1 + projects.length) % projects.length].id); }
     };
@@ -118,14 +112,9 @@ export function App() {
   }, [selected, close, open, showContact]);
 
   return <div className="site-shell">
-    <h1 className="sr-only">3D · Sandy — 业务与项目总览、无限作品画廊</h1>
-    <InfiniteGallery projects={projects} onOpen={open} visible={!active && (!introReady || mode === 'canvas')} dismissed={Boolean(active)} onIntroFinished={finishIntro} />
-    <BusinessOverview projects={projects} onOpen={open} onExplore={() => setMode('canvas')} visible={introReady && mode === 'overview' && !active} />
-
-    {introReady && !active && <nav className="view-switch" aria-label="切换浏览模式">
-      <button type="button" className={mode === 'overview' ? 'is-selected' : ''} aria-pressed={mode === 'overview'} onClick={() => setMode('overview')}>总览</button>
-      <button type="button" className={mode === 'canvas' ? 'is-selected' : ''} aria-pressed={mode === 'canvas'} onClick={() => setMode('canvas')}>自由画布 <span>↗</span></button>
-    </nav>}
+    <h1 className="sr-only">3D · Sandy — 业务与项目目录、动态作品背景</h1>
+    <InfiniteGallery projects={projects} onOpen={open} visible={!active} dismissed={Boolean(active)} onIntroFinished={finishIntro} ambient />
+    <BusinessOverview projects={projects} onOpen={open} onContact={() => setShowContact(true)} visible={introReady && !active} />
 
     {active && <section className="detail-screen" aria-label={`作品详情：${active.name}`}>
       <div className="detail-scroll" ref={detailRef} key={active.id}>
@@ -136,17 +125,13 @@ export function App() {
           <div className="case-art case-art-secondary"><img src={active.secondary} alt={`${active.name} 相关视觉作品`} loading="lazy" /></div>
           <div className="case-copy"><div className="case-section-label">02 / THE APPROACH</div><div className="case-prose"><h3>我是怎么思考这件事的</h3><div className="case-methods">{active.steps.map((line, i) => <div className="method" key={line}><span>0{i + 1}</span><p>{line}</p></div>)}</div></div></div>
           <blockquote className="case-quote">“{active.quote}”<span>— 3D</span></blockquote>
-          <nav className="case-bottom" aria-label="作品导航"><div><span className="case-section-label">03 / NEXT STORY</span><h3>还有很多故事，慢慢讲。</h3></div><div className="case-links">{active.link && <a href={active.link} target="_blank" rel="noopener noreferrer" className="solid-link">访问项目 <span>↗</span></a>}<button type="button" className="outline-link" onClick={close}>返回画廊 <span>↗</span></button></div></nav>
+          <nav className="case-bottom" aria-label="作品导航"><div><span className="case-section-label">03 / NEXT STORY</span><h3>还有很多故事，慢慢讲。</h3></div><div className="case-links">{active.link && <a href={active.link} target="_blank" rel="noopener noreferrer" className="solid-link">访问项目 <span>↗</span></a>}<button type="button" className="outline-link" onClick={close}>返回首页 <span>↗</span></button></div></nav>
         </article>
       </div>
-      <div className="detail-top"><button className="wordmark" onClick={close} type="button" aria-label="返回画廊">3D <span> / works</span></button><button className="detail-close" type="button" onClick={close} aria-label="关闭项目详情"><CloseIcon /></button></div>
+      <div className="detail-top"><button className="wordmark" onClick={close} type="button" aria-label="返回首页">3D <span> / works</span></button><button className="detail-close" type="button" onClick={close} aria-label="关闭项目详情"><CloseIcon /></button></div>
       <div className="detail-pager" aria-label="切换项目"><span className="pager-label">{active.number} — 09</span><button type="button" onClick={() => { const i = projects.findIndex((p) => p.id === selected); open(projects[(i - 1 + projects.length) % projects.length].id); }} aria-label="上一个项目">←</button><button type="button" onClick={() => {const i = projects.findIndex((p) => p.id === selected); open(projects[(i + 1) % projects.length].id);}} aria-label="下一个项目">→</button></div>
     </section>}
 
-    <footer className="fixed-footer" aria-hidden={Boolean(active) || mode === 'overview'}>
-      <div className="footer-signature"><span className="signature">3D</span><span className="dot">·</span><span>© 2026 Crypto3D</span></div>
-      <div className="footer-actions"><a href="https://crypto3d.pro" target="_blank" rel="noopener noreferrer" aria-label="访问 Crypto3D.pro" className="footer-icon"><ContactIcon kind="arrow" /></a><button type="button" className="footer-icon" aria-label="联系我" onClick={() => setShowContact(true)}><ContactIcon /></button><button type="button" className="talk-button" onClick={() => setShowContact(true)}>Let's talk</button></div>
-    </footer>
     {showContact && !active && <div className="contact-backdrop" onClick={() => setShowContact(false)} role="presentation"><section className="contact-modal" role="dialog" aria-modal="true" aria-label="联系方式" onClick={(event) => event.stopPropagation()}><button type="button" className="contact-close" onClick={() => setShowContact(false)} aria-label="关闭联系方式"><CloseIcon /></button><span className="eyebrow">HELLO THERE</span><h2>聊点有意思的。</h2><p>关于加密、科技、内容创作，或者你正在做的一件有趣的事。</p><a href="https://crypto3d.pro" rel="noopener noreferrer" target="_blank" className="solid-link">访问 Crypto3D.pro <span>↗</span></a><button type="button" className="contact-about" onClick={() => open('about')}>先了解我 →</button></section></div>}
   </div>;
 }

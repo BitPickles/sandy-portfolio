@@ -12,7 +12,7 @@ function wantsOpeningAnimation() {
     !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 }
 
-export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroFinished }) {
+export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroFinished, ambient = false }) {
   const surfaceRef = useRef(null);
   const fieldRef = useRef(null);
   const panRef = useRef({ x: 0, y: 0 });
@@ -57,6 +57,22 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
     if (!visible && introPlaying) setIntroPlaying(false);
   }, [visible, introPlaying]);
 
+  // The original seamless canvas also works as an ambient, non-interactive
+  // backdrop. Move the existing field rather than animating 81 individual cards.
+  useEffect(() => {
+    if (!ambient || !visible || introPlaying || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    let frameId;
+    let previousTime;
+    const drift = (now) => {
+      const dt = previousTime === undefined ? 0 : Math.min(now - previousTime, 40);
+      previousTime = now;
+      panBy(-dt * 0.018, -dt * 0.010);
+      frameId = requestAnimationFrame(drift);
+    };
+    frameId = requestAnimationFrame(drift);
+    return () => cancelAnimationFrame(frameId);
+  }, [ambient, visible, introPlaying, panBy]);
+
   const glide = useCallback((velocityX, velocityY) => {
     stopMotion();
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
@@ -98,7 +114,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
     const surface = surfaceRef.current;
     if (!surface) return undefined;
     const wheel = (event) => {
-      if (!visible || event.ctrlKey) return;
+      if (ambient || !visible || event.ctrlKey) return;
       event.preventDefault();
       if (introPlaying) {
         setIntroPlaying(false);
@@ -121,6 +137,10 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
   useEffect(() => () => stopMotion(), [stopMotion]);
 
   const pointerDown = (event) => {
+    if (ambient) {
+      if (introPlaying) setIntroPlaying(false);
+      return;
+    }
     if (!visible || (event.pointerType === 'mouse' && event.button !== 0)) return;
     if (introPlaying) {
       setIntroPlaying(false);
@@ -177,7 +197,7 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
   };
 
   const keyDown = (event) => {
-    if (!visible) return;
+    if (ambient || !visible) return;
     if (introPlaying) {
       setIntroPlaying(false);
       return;
@@ -194,12 +214,12 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
 
   return <section
     ref={surfaceRef}
-    className={`gallery-screen ${dismissed ? 'gallery-dismissed' : ''} ${introPlaying ? 'intro-playing' : ''}`}
+    className={`gallery-screen ${ambient ? 'gallery-ambient' : ''} ${dismissed ? 'gallery-dismissed' : ''} ${introPlaying ? 'intro-playing' : ''}`}
     style={{ '--intro-duration': `${INTRO_DURATION_MS}ms` }}
-    aria-hidden={!visible}
+    aria-hidden={ambient || !visible}
     aria-busy={introPlaying}
     aria-label="可上下左右拖动的无限作品画廊"
-    tabIndex={visible && !introPlaying ? 0 : -1}
+    tabIndex={!ambient && visible && !introPlaying ? 0 : -1}
     onPointerDown={pointerDown}
     onPointerMove={pointerMove}
     onPointerUp={pointerEnd}
@@ -223,9 +243,9 @@ export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroF
             width: layout.cardWidth,
             height: layout.cardHeight,
           }}
-          onClick={() => { if (!suppressClickRef.current) { stopMotion(); onOpen(project.id); } }}
-          tabIndex={visible && !introPlaying && centralTile ? 0 : -1}
-          aria-hidden={!centralTile}
+          onClick={() => { if (!ambient && !suppressClickRef.current) { stopMotion(); onOpen(project.id); } }}
+          tabIndex={!ambient && visible && !introPlaying && centralTile ? 0 : -1}
+          aria-hidden={ambient || !centralTile}
           aria-label={`打开作品：${project.name}`}
         >
           <img src={project.image} alt="" loading={nearViewport ? 'eager' : 'lazy'} draggable="false" />

@@ -7,7 +7,7 @@ const SECTIONS = [
   { id: 'future', number: '03', name: '探索', ids: ['future', 'agi', 'podcast'] },
 ];
 
-export function BusinessOverview({ projects, onOpen, onExplore, visible }) {
+export function BusinessOverview({ projects, onOpen, onContact, visible }) {
   const [focusId, setFocusId] = useState('channel');
   const projectById = Object.fromEntries(projects.map((project) => [project.id, project]));
   const focusProject = projectById[focusId] || projects[0];
@@ -16,6 +16,7 @@ export function BusinessOverview({ projects, onOpen, onExplore, visible }) {
     <div className="overview-content">
       <header className="overview-header">
         <div className="overview-brand"><span className="overview-monogram">3D</span><span><strong>Sandy</strong><small>CRYPTO3D</small></span></div>
+        <button type="button" className="overview-contact" onClick={onContact}>联系我 <span aria-hidden="true">↗</span></button>
       </header>
 
       <div className="overview-columns">
@@ -53,9 +54,6 @@ export function BusinessOverview({ projects, onOpen, onExplore, visible }) {
             </div>
           </div>)}
           <button className="overview-about-link" type="button" onMouseEnter={() => setFocusId('about')} onFocus={() => setFocusId('about')} onClick={() => onOpen('about')}>关于 3D <span aria-hidden="true">↗</span></button>
-          <button className="overview-explore-link" type="button" onClick={onExplore}>
-            <span>进入无限画布</span><span aria-hidden="true">→</span>
-          </button>
         </div>
       </div>
 
