@@ -1,14 +1,19 @@
 import { FLIGHT_DURATION_MS, FLIGHT_PATHS, INTRO_DURATION_MS, flightDelayAt } from './galleryIntroConfig.js';
 
 export function GalleryIntro({ projects, onFinish }) {
+  const filmPreview = new URLSearchParams(window.location.search).get('intro') === 'film';
   return <div
-    className="intro-curtain"
+    className={`intro-curtain${filmPreview ? ' intro-curtain-film' : ''}`}
     aria-hidden="true"
     style={{ '--intro-duration': `${INTRO_DURATION_MS}ms` }}
     onPointerDown={onFinish}
     onAnimationEnd={(event) => { if (event.target === event.currentTarget) onFinish(); }}
   >
-    {projects.map((project, index) => {
+    {filmPreview ? <div className="intro-film-strip">
+      {projects.map((project) => <div className="intro-film-frame" key={project.id}>
+        <img src={project.image} alt="" loading="eager" draggable="false" />
+      </div>)}
+    </div> : projects.map((project, index) => {
       const [fromX, fromY, midX, midY, exitX, exitY, entryTilt, exitTilt] = FLIGHT_PATHS[index];
       return <div
         key={project.id}

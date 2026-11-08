@@ -43,6 +43,36 @@ button:focus-visible,a:focus-visible{outline:2px solid #6c54d8;outline-offset:4p
   0%,94%{opacity:1}
   100%{opacity:0}
 }
+
+/* The preview moves a single strip through the viewport. */
+.intro-curtain-film{background:radial-gradient(ellipse at center,#fff 30%,#eef0f4 100%)}
+.intro-film-strip{
+  --frame-width:clamp(146px,22vw,336px);
+  --sprocket-size:clamp(13px,1.55vw,24px);
+  position:absolute;left:0;top:50%;display:flex;width:max-content;
+  gap:clamp(5px,.55vw,9px);padding:var(--sprocket-size) 10px;
+  background:linear-gradient(180deg,#303136,#18191d 20%,#18191d 80%,#303136);
+  box-shadow:0 16px 46px rgba(18,20,28,.18);
+  animation:intro-film-travel var(--intro-duration) cubic-bezier(.24,.14,.76,.88) both;
+  will-change:transform;
+}
+.intro-film-strip::before,.intro-film-strip::after{
+  content:'';position:absolute;left:0;right:0;height:calc(var(--sprocket-size) * .48);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Crect x='4' y='1' width='15' height='10' rx='2' fill='%23e9eaed'/%3E%3C/svg%3E") repeat-x left center / var(--sprocket-size) 100%;
+  opacity:.84;
+}
+.intro-film-strip::before{top:calc(var(--sprocket-size) * .26)}
+.intro-film-strip::after{bottom:calc(var(--sprocket-size) * .26)}
+.intro-film-frame{
+  flex:none;width:var(--frame-width);aspect-ratio:1.54;
+  display:grid;place-items:center;overflow:hidden;border-radius:3px;background:#f4f5f7;
+}
+.intro-film-frame img{display:block;width:86%;height:86%;object-fit:contain;user-select:none;pointer-events:none}
+@keyframes intro-film-travel{
+  from{transform:translate3d(calc(100vw - var(--frame-width) * .46),-50%,0)}
+  to{transform:translate3d(-100%,-50%,0)}
+}
+
 .art-card{position:absolute;appearance:none;display:flex;align-items:center;justify-content:center;overflow:hidden;border:0;border-radius:26px;background:#f5f6f8;padding:0;isolation:isolate;outline-offset:5px;cursor:pointer;transition:background-color .2s ease,transform .24s cubic-bezier(.22,1,.36,1)}
 .art-card:hover{background:#f0f2f5;transform:translateY(-3px)}
 .art-card img{display:block;width:72%;height:auto;max-height:73%;object-fit:contain;user-select:none;pointer-events:none;transition:transform .38s cubic-bezier(.2,.78,.27,1)}
