@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getGalleryLayout, normalizeOffset, positiveModulo, projectIndexAt } from '../src/infiniteCanvasMath.js';
-import { FLIGHT_DURATION_MS, FLIGHT_PATHS, FLIGHT_STAGGER_MS, INTRO_DURATION_MS, SWEEP_DURATION_MS, SWEEP_FLIGHTS, flightDelayAt } from '../src/galleryIntroConfig.js';
+import { FLIGHT_DURATION_MS, FLIGHT_PATHS, FLIGHT_STAGGER_MS, INTRO_DURATION_MS, flightDelayAt } from '../src/galleryIntroConfig.js';
 
 test('a three-by-three region contains all nine projects exactly once', () => {
   const projects = [];
@@ -59,18 +59,4 @@ test('cinematic intro ends with the ninth card, without a separate hold', () => 
   assert.equal(flightDelayAt(8), 8 * FLIGHT_STAGGER_MS);
   assert.equal(flightDelayAt(8) + FLIGHT_DURATION_MS, INTRO_DURATION_MS);
   assert.ok(new Set(FLIGHT_PATHS.map((path) => path.join(','))).size === 9);
-});
-
-test('fast sweep overlaps all nine independent flights and ends with the final cover', () => {
-  assert.equal(SWEEP_FLIGHTS.length, FLIGHT_PATHS.length);
-  assert.ok(SWEEP_DURATION_MS <= 1500);
-  for (const [index, [delay, duration, lane]] of SWEEP_FLIGHTS.entries()) {
-    const next = SWEEP_FLIGHTS[index + 1];
-    if (next) {
-      assert.ok(next[0] < delay + duration);
-      assert.notEqual(next[2], lane);
-    } else {
-      assert.equal(delay + duration, SWEEP_DURATION_MS);
-    }
-  }
 });

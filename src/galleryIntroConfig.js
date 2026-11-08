@@ -20,18 +20,3 @@ export function flightDelayAt(index) {
 }
 
 export const INTRO_DURATION_MS = flightDelayAt(FLIGHT_PATHS.length - 1) + FLIGHT_DURATION_MS;
-
-// Delay, duration, vertical lane (%), vertical drift (vh), and relative size.
-export const SWEEP_FLIGHTS = [
-  [0, 480, 50, -5, 1.1],
-  [65, 420, 23, 4, .78],
-  [105, 440, 76, -6, .85],
-  [305, 470, 38, 7, 1],
-  [368, 440, 74, 3, .8],
-  [475, 440, 21, -4, .72],
-  [645, 420, 74, -7, .8],
-  [710, 430, 25, 7, .82],
-  [795, 505, 50, -3, 1.12],
-];
-
-export const SWEEP_DURATION_MS = Math.max(...SWEEP_FLIGHTS.map(([delay, duration]) => delay + duration));
