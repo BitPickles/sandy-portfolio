@@ -1,0 +1,239 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getGalleryLayout, normalizeOffset, projectIndexAt } from './infiniteCanvasMath.js';
+import { GalleryIntro } from './GalleryIntro.jsx';
+import { INTRO_DURATION_MS } from './galleryIntroConfig.js';
+
+const COLUMNS = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+const ROWS = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+const DRAG_THRESHOLD = 7;
+
+function wantsOpeningAnimation() {
+  return typeof window !== 'undefined' &&
+    !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+}
+
+export function InfiniteGallery({ projects, onOpen, visible, dismissed, onIntroFinished }) {
+  const surfaceRef = useRef(null);
+  const fieldRef = useRef(null);
+  const panRef = useRef({ x: 0, y: 0 });
+  const motionRef = useRef(null);
+  const dragRef = useRef(null);
+  const suppressClickRef = useRef(false);
+  const [introPlaying, setIntroPlaying] = useState(wantsOpeningAnimation);
+  const [layout, setLayout] = useState(() => getGalleryLayout(typeof window === 'undefined' ? 1440 : window.innerWidth));
+  const layoutRef = useRef(layout);
+  layoutRef.current = layout;
+
+  const draw = useCallback(() => {
+    if (!fieldRef.current) return;
+    const { x, y } = panRef.current;
+    fieldRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }, []);
+
+  const stopMotion = useCallback(() => {
+    if (motionRef.current !== null) cancelAnimationFrame(motionRef.current);
+    motionRef.current = null;
+  }, []);
+
+  const panBy = useCallback((dx, dy) => {
+    const { stepX, stepY } = layoutRef.current;
+    const pan = panRef.current;
+    pan.x = normalizeOffset(pan.x + dx, stepX * 3);
+    pan.y = normalizeOffset(pan.y + dy, stepY * 3);
+    draw();
+  }, [draw]);
+
+  useEffect(() => {
+    if (!introPlaying) return undefined;
+    const timer = window.setTimeout(() => setIntroPlaying(false), INTRO_DURATION_MS);
+    return () => window.clearTimeout(timer);
+  }, [introPlaying]);
+
+  useEffect(() => {
+    if (!introPlaying) onIntroFinished?.();
+  }, [introPlaying, onIntroFinished]);
+
+  useEffect(() => {
+    if (!visible && introPlaying) setIntroPlaying(false);
+  }, [visible, introPlaying]);
+
+  const glide = useCallback((velocityX, velocityY) => {
+    stopMotion();
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    let vx = Math.max(-2.5, Math.min(2.5, velocityX));
+    let vy = Math.max(-2.5, Math.min(2.5, velocityY));
+    let previous = performance.now();
+
+    const frame = (now) => {
+      const dt = Math.min(now - previous, 40);
+      previous = now;
+      const decay = Math.pow(0.91, dt / 16.67);
+      vx *= decay;
+      vy *= decay;
+      if (Math.hypot(vx, vy) < 0.012) {
+        motionRef.current = null;
+        return;
+      }
+      panBy(vx * dt, vy * dt);
+      motionRef.current = requestAnimationFrame(frame);
+    };
+    if (Math.hypot(vx, vy) > 0.025) motionRef.current = requestAnimationFrame(frame);
+  }, [panBy, stopMotion]);
+
+  useEffect(() => {
+    const resize = () => {
+      const next = getGalleryLayout(window.innerWidth);
+      layoutRef.current = next;
+      const pan = panRef.current;
+      pan.x = normalizeOffset(pan.x, next.stepX * 3);
+      pan.y = normalizeOffset(pan.y, next.stepY * 3);
+      setLayout(next);
+      draw();
+    };
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, [draw]);
+
+  useEffect(() => {
+    const surface = surfaceRef.current;
+    if (!surface) return undefined;
+    const wheel = (event) => {
+      if (!visible || event.ctrlKey) return;
+      event.preventDefault();
+      if (introPlaying) {
+        setIntroPlaying(false);
+        return;
+      }
+      stopMotion();
+      const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+      const dx = event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX;
+      const dy = event.shiftKey && !event.deltaX ? 0 : event.deltaY;
+      panBy(-dx * scale, -dy * scale);
+    };
+    surface.addEventListener('wheel', wheel, { passive: false });
+    return () => surface.removeEventListener('wheel', wheel);
+  }, [introPlaying, panBy, stopMotion, visible]);
+
+  useEffect(() => {
+    if (!visible) stopMotion();
+  }, [visible, stopMotion]);
+
+  useEffect(() => () => stopMotion(), [stopMotion]);
+
+  const pointerDown = (event) => {
+    if (!visible || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    if (introPlaying) {
+      setIntroPlaying(false);
+      return;
+    }
+    stopMotion();
+    dragRef.current = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      lastX: event.clientX,
+      lastY: event.clientY,
+      lastTime: performance.now(),
+      vx: 0,
+      vy: 0,
+      moved: false,
+    };
+  };
+
+  const pointerMove = (event) => {
+    const drag = dragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    const totalDistance = Math.hypot(event.clientX - drag.x, event.clientY - drag.y);
+    if (!drag.moved && totalDistance >= DRAG_THRESHOLD) {
+      drag.moved = true;
+      suppressClickRef.current = true;
+      surfaceRef.current?.setPointerCapture(event.pointerId);
+      surfaceRef.current?.classList.add('is-dragging');
+    }
+    if (!drag.moved) return;
+
+    const now = performance.now();
+    const elapsed = Math.max(8, now - drag.lastTime);
+    const dx = event.clientX - drag.lastX;
+    const dy = event.clientY - drag.lastY;
+    panBy(dx, dy);
+    drag.vx = dx / elapsed;
+    drag.vy = dy / elapsed;
+    drag.lastX = event.clientX;
+    drag.lastY = event.clientY;
+    drag.lastTime = now;
+  };
+
+  const pointerEnd = (event) => {
+    const drag = dragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    if (drag.moved) {
+      surfaceRef.current?.classList.remove('is-dragging');
+      if (surfaceRef.current?.hasPointerCapture(event.pointerId)) surfaceRef.current.releasePointerCapture(event.pointerId);
+      if (event.type !== 'pointercancel' && visible) glide(drag.vx, drag.vy);
+      window.setTimeout(() => { suppressClickRef.current = false; }, 140);
+    }
+    dragRef.current = null;
+  };
+
+  const keyDown = (event) => {
+    if (!visible) return;
+    if (introPlaying) {
+      setIntroPlaying(false);
+      return;
+    }
+    const movement = 110;
+    if (event.key === 'ArrowLeft') panBy(movement, 0);
+    else if (event.key === 'ArrowRight') panBy(-movement, 0);
+    else if (event.key === 'ArrowUp') panBy(0, movement);
+    else if (event.key === 'ArrowDown') panBy(0, -movement);
+    else return;
+    event.preventDefault();
+    stopMotion();
+  };
+
+  return <section
+    ref={surfaceRef}
+    className={`gallery-screen ${dismissed ? 'gallery-dismissed' : ''} ${introPlaying ? 'intro-playing' : ''}`}
+    style={{ '--intro-duration': `${INTRO_DURATION_MS}ms` }}
+    aria-hidden={!visible}
+    aria-busy={introPlaying}
+    aria-label="可上下左右拖动的无限作品画廊"
+    tabIndex={visible && !introPlaying ? 0 : -1}
+    onPointerDown={pointerDown}
+    onPointerMove={pointerMove}
+    onPointerUp={pointerEnd}
+    onPointerCancel={pointerEnd}
+    onKeyDown={keyDown}
+  >
+    <div className={`infinite-stage ${introPlaying ? 'canvas-arrival' : ''}`}>
+      <div className="infinite-field" ref={fieldRef}>
+      {ROWS.flatMap((row) => COLUMNS.map((column) => {
+        const index = projectIndexAt(row, column, layout.mobile);
+        const project = projects[index];
+        const centralTile = row >= 0 && row <= 2 && column >= -1 && column <= 1;
+        const nearViewport = Math.abs(row) <= 2 && Math.abs(column) <= 2;
+        return <button
+          type="button"
+          className={`art-card art-${project.id}`}
+          key={`${row}:${column}`}
+          style={{
+            left: layout.originX + column * layout.stepX,
+            top: layout.top + row * layout.stepY,
+            width: layout.cardWidth,
+            height: layout.cardHeight,
+          }}
+          onClick={() => { if (!suppressClickRef.current) { stopMotion(); onOpen(project.id); } }}
+          tabIndex={visible && !introPlaying && centralTile ? 0 : -1}
+          aria-hidden={!centralTile}
+          aria-label={`打开作品：${project.name}`}
+        >
+          <img src={project.image} alt="" loading={nearViewport ? 'eager' : 'lazy'} draggable="false" />
+          <span className="art-overlay"><span className="art-name">{project.name}</span><span className="art-category">{project.category}</span></span>
+        </button>;
+      }))}
+      </div>
+    </div>
+    {introPlaying && <GalleryIntro projects={projects} />}
+  </section>;
+}
