@@ -8,6 +8,7 @@
 - Reveal the complete homepage during the last cover's exit. Keep the directory and its ambient background in the same reveal, with no standalone canvas or pause between the opening and the homepage.
 - The user selected the original 2.7-second opening after reviewing the filmstrip and fast sweep previews. Use the original alternating cover paths for the live opening.
 - Use lightweight covers in the opening, ambient canvas, and homepage preview. Prioritize the first cover and keep the original full-resolution artwork in project details.
+- Let the artwork fill the homepage preview frame edge to edge. Match the frame to the covers' 16:10 aspect ratio and clip the image to the rounded corners.
 - Use the supplied public destinations for the YouTube channel, Crypto3D 数据站, 什么值得挖, and X. Identify 什么值得挖 as a member sign-in entry when linking to its public landing page.
 - Use the approved covers for 3D 加密频道 (YouTube mark and layered video thumbnails), 会员社区 (silver community card), Crypto3D 数据站 (layered interface screenshots), and 什么值得挖 (mining strategy sheets).
 - Reuse the eight-image infinite field **only as a gently, continuously moving ambient background** under a tasteful transparent/frosted-glass directory. No duplicate canvas entry CTA, mode toggle, or independent gallery interaction.

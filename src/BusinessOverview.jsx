@@ -26,7 +26,7 @@ export function BusinessOverview({ projects, onOpen, onContact, visible, introPl
           <p className="overview-description">加密内容、市场研究、AI 与未来技术。</p>
 
           <div className="overview-feature" aria-live="polite">
-            <div className={`overview-feature-mat art-${focusProject.id}`} key={focusProject.id}>
+            <div className="overview-feature-mat" key={focusProject.id}>
               <img src={focusProject.previewImage} alt={`${focusProject.name} 的项目封面`} />
             </div>
             <div className="overview-feature-caption"><span>{focusProject.number}</span><span>{focusProject.name}</span></div>
