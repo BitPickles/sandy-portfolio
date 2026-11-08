@@ -7,7 +7,7 @@ const SECTIONS = [
   { id: 'future', number: '03', name: '探索', ids: ['future', 'agi', 'podcast'] },
 ];
 
-export function BusinessOverview({ projects, onOpen, onContact, visible, introPlaying }) {
+export function BusinessOverview({ projects, onOpen, onContact, xProfile, visible, introPlaying }) {
   const [focusId, setFocusId] = useState('channel');
   const projectById = Object.fromEntries(projects.map((project) => [project.id, project]));
   const focusProject = projectById[focusId] || projects[0];
@@ -17,7 +17,13 @@ export function BusinessOverview({ projects, onOpen, onContact, visible, introPl
     <div className="overview-content">
       <header className="overview-header">
         <div className="overview-brand"><span className="overview-monogram">3D</span><span><strong>Sandy</strong><small>CRYPTO3D</small></span></div>
-        <button type="button" className="overview-contact" onClick={onContact}>联系我 <span aria-hidden="true">↗</span></button>
+        <div className="overview-header-actions">
+          <a className="overview-header-action" href={xProfile} target="_blank" rel="noopener noreferrer" aria-label="X（Twitter）@22333D">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817-5.969 6.817H1.678l7.73-8.835L1.254 2.25h6.826l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @22333D
+          </a>
+          <button type="button" className="overview-header-action" onClick={onContact}>联系我 <span aria-hidden="true">↗</span></button>
+        </div>
       </header>
 
       <div className="overview-columns">

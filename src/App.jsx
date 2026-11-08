@@ -129,7 +129,7 @@ export function App() {
   return <div className="site-shell">
     <h1 className="sr-only">3D · Sandy — 业务与项目目录、动态作品背景</h1>
     <InfiniteGallery projects={projects} onOpen={open} visible={!active} dismissed={Boolean(active)} introPlaying={introPlaying} ambient />
-    <BusinessOverview projects={projects} onOpen={open} onContact={() => setShowContact(true)} visible={!active} introPlaying={introPlaying} />
+    <BusinessOverview projects={projects} onOpen={open} onContact={() => setShowContact(true)} xProfile={xProfile} visible={!active} introPlaying={introPlaying} />
     {introPlaying && <GalleryIntro projects={projects} onFinish={finishIntro} />}
 
     {active && <section className="detail-screen" aria-label={`作品详情：${active.name}`}>
