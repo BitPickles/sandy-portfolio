@@ -15,7 +15,7 @@ const projects = [
     story: '频道里有 Pendle 收益策略、JLP 套利和 Uniswap 代币机制等专题，也会做硬件钱包体验和投资研究。',
     detail: '视频结合实际案例拆解协议机制、收益来源和操作风险，帮助观众自己判断一项策略。',
     steps: ['先把机制拆开，说清楚钱从哪里来。', '在乐观叙事之外，认真讨论成本和风险。', '让观众形成自己的判断，而不是依赖某个答案。'],
-    quote: '比知道发生了什么更重要的，是知道为什么会发生。', secondary: galleryImage('mining.webp'),
+    quote: '比知道发生了什么更重要的，是知道为什么会发生。',
     link: 'https://www.youtube.com/@Crypto36D', linkLabel: '观看 YouTube 频道',
   },
   {
@@ -25,7 +25,7 @@ const projects = [
     story: '协议估值看板追踪回购、销毁和分红等机制，比较不同协议的 P/E、P/S 和持有人回报率。',
     detail: 'BTC 周期页汇总 AHR999、MVRV 和 BTC 市占率。站内也有存储半导体估值看板，以及加密资产和协议研究文章。',
     steps: ['查协议收入、估值与代币价值分配。', '结合多项指标观察 BTC 所处的周期。', '从研究文章追溯数据和分析思路。'],
-    quote: '观点可以很锋利，证据必须能追溯。', secondary: galleryImage('strategy.webp'),
+    quote: '观点可以很锋利，证据必须能追溯。',
     link: 'https://crypto3d.pro/', linkLabel: '打开数据站',
   },
   {
@@ -35,7 +35,7 @@ const projects = [
     story: '分析链上收益时，我会先看资金从哪里来、补贴能持续多久，以及退出时有没有足够的流动性。',
     detail: '网站入口是「矿田」会员登录页，符合资格的会员可使用 Google 账号登录。',
     steps: ['区分真实利息、平台激励和一次性奖励。', '测试容量、流动性与极端情景下的退出条件。', '把收益率放回自己的风险预算，而非只追榜单。'],
-    quote: '最好的机会，不一定是数字最大的一项。', secondary: galleryImage('channel.webp'),
+    quote: '最好的机会，不一定是数字最大的一项。',
     link: 'https://shenmezhidewa.com', linkLabel: '前往会员登录',
   },
   {
@@ -150,7 +150,7 @@ export function App() {
           </header>
           <div className="case-art"><img src={active.image} alt={`${active.name} 项目作品封面`} /></div>
           <div className="case-copy"><div className="case-section-label">01 / THE STORY</div><div className="case-prose"><h3>{active.title}</h3><p>{active.story}</p><p>{active.detail}</p></div></div>
-          <div className="case-art case-art-secondary"><img src={active.secondary} alt={`${active.name} 相关视觉作品`} loading="lazy" /></div>
+          {active.secondary && <div className="case-art case-art-secondary"><img src={active.secondary} alt={`${active.name} 相关视觉作品`} loading="lazy" /></div>}
           <div className="case-copy"><div className="case-section-label">02 / THE APPROACH</div><div className="case-prose"><h3>我是怎么思考这件事的</h3><div className="case-methods">{active.steps.map((line, i) => <div className="method" key={line}><span>0{i + 1}</span><p>{line}</p></div>)}</div></div></div>
           <blockquote className="case-quote">“{active.quote}”<span>— 3D</span></blockquote>
           <nav className="case-bottom" aria-label="作品导航"><div><span className="case-section-label">03 / NEXT STORY</span><h3>还有很多故事，慢慢讲。</h3></div><div className="case-links"><button type="button" className="outline-link" onClick={close}>返回首页 <span>↗</span></button></div></nav>
